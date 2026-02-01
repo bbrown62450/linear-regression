@@ -51,10 +51,21 @@ def _fetch_cpi_bls(api_key: str) -> pd.DataFrame:
     resp = requests.post(url, json=payload)
     resp.raise_for_status()
     j = resp.json()
-    if "Results" not in j or not j["Results"]["series"]:
-        raise ValueError("No CPI data returned from BLS")
+
+    # BLS returns status/message on error; success has Results.series
+    if j.get("status") == "REQUEST_FAILED":
+        msg = j.get("message", ["Unknown BLS error"])
+        err = msg[0] if isinstance(msg, list) else msg
+        raise ValueError(f"BLS API error: {err}")
+    results = j.get("Results")
+    if not results:
+        raise ValueError("BLS returned no results. Check your API key at bls.gov/developers.")
+    series_list = results.get("series") if isinstance(results, dict) else None
+    if not series_list:
+        raise ValueError("BLS returned no series. Check your API key and try again.")
+
     rows = []
-    for item in j["Results"]["series"][0]["data"]:
+    for item in series_list[0]["data"]:
         period = item["period"]
         year = item["year"]
         month = "01" if period == "M13" else period.replace("M", "")
