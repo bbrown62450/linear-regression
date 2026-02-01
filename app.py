@@ -22,6 +22,32 @@ st.set_page_config(page_title="CPI vs Division", layout="centered")
 st.title("CPI vs division performance")
 st.caption("Compare Consumer Price Index to your division metric using linear regression.")
 
+# Download template / example CSV
+_template_path = os.path.join(os.path.dirname(__file__), "division_performance_template.csv")
+_example_path = os.path.join(os.path.dirname(__file__), "division_performance.csv")
+def _read_csv_bytes(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
+col1, col2 = st.columns(2)
+with col1:
+    if os.path.exists(_template_path):
+        st.download_button(
+            "Download template CSV",
+            data=_read_csv_bytes(_template_path),
+            file_name="division_performance_template.csv",
+            mime="text/csv",
+            help="Template with date and value columns. Fill in your division metric (e.g. revenue, volume).",
+        )
+with col2:
+    if os.path.exists(_example_path):
+        st.download_button(
+            "Download example CSV",
+            data=_read_csv_bytes(_example_path),
+            file_name="division_performance_example.csv",
+            mime="text/csv",
+            help="Sample data so you can see the expected format.",
+        )
+
 # Sidebar: CPI source
 with st.sidebar:
     st.header("Data")

@@ -78,9 +78,9 @@ Other options (also free tiers):
 ## Use your own data
 
 1. **Division performance**  
-   Replace `division_performance.csv` with your numbers. Keep two columns:
-   - `date` — e.g. `2024-01` or `2024-01-15`
-   - `value` — your metric (revenue, volume, margin, etc.)
+   Use two columns: `date` and `value` (your metric: revenue, volume, margin, etc.).
+   - In the **web app**: use **Download template CSV** (empty placeholders) or **Download example CSV** (sample format), then upload your filled file.
+   - In the **repo**: `division_performance_template.csv` is a template to fill; `division_performance.csv` is a full example.
 
 2. **Live CPI**  
    Get a free [BLS API key](https://www.bls.gov/developers/home.htm) and call:
